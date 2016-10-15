@@ -1,0 +1,13 @@
+#config file for client
+ServerIP=127.0.0.1
+ServerPort=7890
+MaxAttempt=100
+Username=user1
+Password=13313
+UpdateEnclave=0
+EnclaveID=84c9793b12c29d165a4d386977f63cc8f95fa423a93b42f898b9b03c729c4629
+PrivateKey=018c03d1533457adeaaeb6653b6a861fec879c4311de663bcea1522dbb6ce790
+Parser=0
+DataFileCount=2
+DataFilePath0=..\Data\party1_tdt.txt
+DataFilePath1=..\Data\party1_freq.txt

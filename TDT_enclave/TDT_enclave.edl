@@ -1,0 +1,69 @@
+enclave {
+    from "sgx_tkey_exchange.edl" import *;
+
+    include "sgx_key_exchange.h"
+    include "sgx_trts.h"
+	include "..\Common\TDT.h"
+	include "..\Common\Debug_Flags.h"
+
+
+    trusted {
+		/* define ECALLs here. */
+		public sgx_status_t enclave_init_ra(int b_pse,int client_id,
+	                                        [out] sgx_ra_context_t *p_context);
+        public sgx_status_t enclave_ra_close(sgx_ra_context_t context);
+        public sgx_status_t verify_att_result_mac(sgx_ra_context_t context,
+                                                  [in,size=message_size] uint8_t* message, 
+                                                  size_t message_size, 
+                                                  [in,size=mac_size] uint8_t* mac, 
+                                                  size_t mac_size);
+
+
+
+		//public void intializeEnclave(unsigned _L, unsigned _parties_num, unsigned _K); 
+		  
+		/*public void updateBC([in, count = L0 ] TDT_INPUT_TYPE* array_b_0, 
+							 [in, count = L0 ] TDT_INPUT_TYPE* array_c_0, 
+							 int L0);*/
+							 
+	    public void initializeIV(int client_num);
+
+		/*public void getKLargest([out, count = K0] TDT_OUTPUT_TYPE* tdts_K_largest, 
+								[out, count = K0] TDT_OUTPUT_INDEX_TYPE* tdts_K_largest_index, 
+								int K0);*/
+
+		public void freeBC();
+        
+		
+		public void updateBC_wraper(sgx_ra_context_t context,
+								 [in, size = size_in]char *data, 
+								 int size_in,
+								 int numberofParties,
+								 int topK,
+								 int compression,
+								 int client,
+								 int size_after_decompression);
+
+		public void load_cm( sgx_ra_context_t context, 
+							 [in, size = size_in]char* cm,
+							 int size_in,
+							 int client_num);
+		/*public void update_index(int topK, int seg_No);*/
+
+		//@param size_out = topK*(sizeof(TDT_OUTPUT_TYPE) + sizeof(TDT_OUTPUT_INDEX_TYPE) + 4*sizeof(TDT_INPUT_TYPE)) + 16bytes of mac
+		public void result_encryption([out, size = size_out]char *result, 
+								 int size_out, 
+								 [in, size = size_context]sgx_ra_context_t *context,
+								 int size_context, 
+								 int numberofParties,
+								 int topK); 
+    };
+
+
+
+
+	untrusted {
+        void ocall_print_string([in, string] const char *str);
+    };
+
+};
